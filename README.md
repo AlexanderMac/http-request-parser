@@ -1,10 +1,10 @@
 A node package for parsing http request, and creating an object model for it.
 ===================
 
-Example of usage:
+## Usage
 
 <pre><code>
-  var parser = require('./index');
+  var parser = require('http-request-parser');
 
   var request = 
     'POST http://localhost/test?dd=e HTTP/1.1\n' +
@@ -26,3 +26,12 @@ Example of usage:
   
   var requestObj = parser.parse(request);
 </code></pre>
+
+
+## License
+This code available under the MIT License.
+See License.md for details.  
+
+## Authors
+
+**Alexander Mac** ([amatsibarov@gmail.com](mailto:amatsibarov@gmail.com))
