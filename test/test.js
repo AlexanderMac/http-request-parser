@@ -6,39 +6,6 @@
 
 var parser = require('../index');
 var should = require('should');
-var util = require('util');
-
-
-var request = [
-  'POST http://localhost/test HTTP/2.1',
-  'Host: localhost',
-  'Connection: keep-alive',      
-  'Cache-Control: no-cache',
-  'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
-  'Content-Type: multipart/form-data; boundary=------11136253119209',
-  'Content-Length: 101',
-  'Cookie: csrftoken=123abc;sessionid=456def',
-  'Accept: */*',
-  'Accept-Encoding: gzip,deflate',
-  'Accept-Language: en-US;q=0.6,en;q=0.4',
-  '',
-  '-----------------------------11136253119209',
-  'Content-Disposition: form-data; name="Name"',
-  '',
-  'Ivanov',
-  '-----------------------------11136253119209',
-  'Content-Disposition: form-data; name="Age"',
-  '',
-  '25',
-  '-----------------------------11136253119209--'
-].join('\n');
-var requestObj = parser.parse(request);
-
-console.log(util.inspect(requestObj, {colors: true, depth: 5}));
-
-
-
-
 
 describe('#parse()', function() {
   
