@@ -4,34 +4,39 @@
  * MIT Licensed
  */
 
-var names = {
+var httpConsts = {
   methods: [
     'GET',
     'POST',
     'PUT',
     'DELETE'
   ],
+  
   protocolVersions: [
     'HTTP/1.0',
     'HTTP/1.1',
     'HTTP/1.2',
     'HTTP/2.0'
   ],
+  
   protocols: [
     'HTTP',
     'HTTPS'
   ],
+  
   headers: {
-    contentTypeHeader: 'Content-Type',
-    contentLengthHeader: 'Content-Length',
+    contentType: 'Content-Type',
+    contentLength: 'Content-Length',
   },
-  methodGet: 'GET',
-  boundaryParam: 'boundary',
+  
   contentTypes: {
     formData: 'multipart/form-data',
     xWwwFormUrlencoded: 'application/x-www-form-urlencoded',
     plain: 'text/plain'
-  }
+  },
+  
+  GET_METHOD: 'GET',
+  BOUNDARY: 'boundary',
 };
 
-module.exports = names;
+module.exports = httpConsts;
