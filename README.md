@@ -42,7 +42,7 @@ A node package for parsing a plain http request, and creating an object model fo
   
   // requestObj now is object:
   /*
-  var expected = { 
+  var requestObj = { 
     method: 'POST',
     protocol: 'HTTP',
     url: 'localhost/test',
@@ -56,7 +56,7 @@ A node package for parsing a plain http request, and creating an object model fo
       ]},
       { name: 'Content-Type', values: [ { value: 'multipart/form-data', params: 'boundary=------11136253119209' } ] },
       { name: 'Content-Length', values: [ { value: '101', params: null } ] },
-      { name: 'Accept', values: [ { value: '*/*', params: null } ] },
+      { name: 'Accept', values: [ { value: '/', params: null } ] },
       { name: 'Accept-Encoding', values: [ 
         { value: 'gzip', params: null },
         { value: 'deflate', params: null }
@@ -78,8 +78,8 @@ A node package for parsing a plain http request, and creating an object model fo
         { name: "Name", value: "Ivanov" },
         { name: "Age", value: "25" }
       ] 
-    }*/
-  };
+    }
+  };*/
 ```
 
 ## License
