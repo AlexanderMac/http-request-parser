@@ -1,5 +1,7 @@
-A node package for parsing a plain http request, and creating an object model for it.
+http-request-parser
 ===================
+A node package for parsing a plain http request, and creating an object model for it.
+
 
 ## Features
 * Parsing headers (with parameters).
