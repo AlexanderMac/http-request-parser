@@ -33,10 +33,7 @@ var httpConsts = {
     formData: 'multipart/form-data',
     xWwwFormUrlencoded: 'application/x-www-form-urlencoded',
     plain: 'text/plain'
-  },
-  
-  GET_METHOD: 'GET',
-  BOUNDARY: 'boundary',
+  }
 };
 
 module.exports = httpConsts;
