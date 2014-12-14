@@ -1,6 +1,6 @@
 {
   "name": "http-request-parser",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A node package for parsing http request, and creating an object model for it.",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,5 @@
   "bugs": {
     "url": "https://github.com/AlexanderMac/http-request-parser/issues"
   },
-  "homepage": "https://github.com/AlexanderMac/http-request-parser",
-  "private": "true"
+  "homepage": "https://github.com/AlexanderMac/http-request-parser"
 }
