@@ -84,7 +84,7 @@ var requestObj = {
 };*/
 ```
 
-The package generates an object, which can be used in another [package](https://github.com/AlexanderMac/http-request-builder) (building a plain http request from an object).
+The package generates an object, which can be used in another [package](https://github.com/AlexanderMac/http-request-builder) (builds a plain http request from an object).
 
 ## License
 This code available under the MIT License.
