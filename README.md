@@ -9,7 +9,7 @@ A node package for parsing a plain http request, and creating an object model fo
 * Parsing body with contentType:
   * multipart/form-data
   * application/x-www-form-urlencoded
-  * text/plain'
+  * text/plain
 
 ## Usage
 
