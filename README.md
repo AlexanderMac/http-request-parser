@@ -68,7 +68,7 @@ A node package for parsing a plain http request, and creating an object model fo
         { value: 'en', params: 'q=0.4' } 
       ]}
     ],
-    cookies: [
+    cookie: [
       { name: 'csrftoken', value: '123abc' },
       { name: 'sessionid', value: '456def' }
     ],

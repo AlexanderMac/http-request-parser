@@ -45,7 +45,7 @@ describe('#parse()', function() {
             { value: 'en', params: 'q=0.4' } 
           ]}
         ],
-        cookies: [
+        cookie: [
           { name: 'csrftoken', value: '123abc' },
           { name: 'sessionid', value: '456def' }
         ],
@@ -100,7 +100,7 @@ describe('#parse()', function() {
             { value: 'en', params: 'q=0.4' } 
           ]}
         ],
-        cookies: null,
+        cookie: null,
         body: { 
           hasBody: true,
           contentType: 'application/x-www-form-urlencoded',
@@ -167,7 +167,7 @@ describe('#parse()', function() {
             { value: 'en', params: 'q=0.4' } 
           ]}
         ],
-        cookies: [
+        cookie: [
           { name: 'csrftoken', value: '123abc' },
           { name: 'sessionid', value: '456def' }
         ],
@@ -230,7 +230,7 @@ describe('#parse()', function() {
             { value: 'en', params: 'q=0.4' } 
           ]}
         ],
-        cookies: [
+        cookie: [
           { name: 'csrftoken', value: '123abc' },
           { name: 'sessionid', value: '456def' }
         ],
