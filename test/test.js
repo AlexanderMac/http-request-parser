@@ -49,9 +49,7 @@ describe('#parse()', function() {
           { name: 'csrftoken', value: '123abc' },
           { name: 'sessionid', value: '456def' }
         ],
-        body: { 
-          hasBody: false
-        } 
+        body: null
       };
     
       var actual = parser.parse(request);
@@ -101,8 +99,7 @@ describe('#parse()', function() {
           ]}
         ],
         cookie: null,
-        body: { 
-          hasBody: true,
+        body: {
           contentType: 'application/x-www-form-urlencoded',
           boundary: null,
           formDataParams: [
@@ -171,8 +168,7 @@ describe('#parse()', function() {
           { name: 'csrftoken', value: '123abc' },
           { name: 'sessionid', value: '456def' }
         ],
-        body: { 
-          hasBody: true,
+        body: {
           contentType: 'multipart/form-data',
           boundary: '------11136253119209',
           formDataParams: [
@@ -234,8 +230,7 @@ describe('#parse()', function() {
           { name: 'csrftoken', value: '123abc' },
           { name: 'sessionid', value: '456def' }
         ],
-        body: { 
-          hasBody: true,
+        body: {
           contentType: 'application/json',
           boundary: null,
           plain: '{{"p1": "v1"}, {"p2": "v2"}}' 
