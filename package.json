@@ -1,6 +1,6 @@
 {
   "name": "http-request-parser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A node package for parsing http request, and creating an object model for it.",
   "main": "index.js",
   "scripts": {
