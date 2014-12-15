@@ -5,11 +5,11 @@
  */
 
 var parser = require('../index');
-var should = require('should');
+require('should');
 
 describe('#parse()', function() {
   
-  describe("GET method", function() {    
+  describe('GET method', function() {    
     it('should parse valid http request message', function() {    
       var request = [
         'GET http://localhost/test HTTP/2.1',
@@ -32,10 +32,18 @@ describe('#parse()', function() {
         protocolVersion: 'HTTP/2.1',
         host: 'localhost',
         headers: [ 
-          { name: 'Connection', values: [ { value: 'keep-alive', params: null } ] },          
-          { name: 'Cache-Control', values: [ { value: 'no-cache', params: null } ] },
-          { name: 'User-Agent', values: [ { value: 'Mozilla/5.0 (Windows NT 6.1 WOW64)', params: null } ]},
-          { name: 'Accept', values: [ { value: '*/*', params: null } ] },
+          { name: 'Connection', values: [ 
+            { value: 'keep-alive', params: null } 
+          ]},          
+          { name: 'Cache-Control', values: [ 
+            { value: 'no-cache', params: null } 
+          ]},
+          { name: 'User-Agent', values: [ 
+            { value: 'Mozilla/5.0 (Windows NT 6.1 WOW64)', params: null } 
+          ]},
+          { name: 'Accept', values: [ 
+            { value: '*/*', params: null } 
+          ]},
           { name: 'Accept-Encoding', values: [ 
             { value: 'gzip', params: null },
             { value: 'deflate', params: null }
@@ -79,14 +87,24 @@ describe('#parse()', function() {
         protocolVersion: 'HTTP/2.0',
         host: 'localhost',
         headers: [ 
-          { name: 'Connection', values: [ { value: 'keep-alive', params: null } ] },          
-          { name: 'Cache-Control', values: [ { value: 'no-cache', params: null } ] },
+          { name: 'Connection', values: [ 
+            { value: 'keep-alive', params: null } 
+          ]},          
+          { name: 'Cache-Control', values: [ 
+            { value: 'no-cache', params: null } 
+          ]},
           { name: 'User-Agent', values: [ 
             { value: 'Mozilla/5.0 (Windows NT 6.1 WOW64)', params: null } 
           ]},
-          { name: 'Content-Type', values: [ { value: 'application/x-www-form-urlencoded', params: 'charset=UTF-8' } ] },
-          { name: 'Content-Length', values: [ { value: '301', params: null } ] },
-          { name: 'Accept', values: [ { value: '*/*', params: null } ] },
+          { name: 'Content-Type', values: [ 
+            { value: 'application/x-www-form-urlencoded', params: 'charset=UTF-8' } 
+          ]},
+          { name: 'Content-Length', values: [ 
+            { value: '301', params: null } 
+          ]},
+          { name: 'Accept', values: [ 
+            { value: '*/*', params: null } 
+          ]},
           { name: 'Accept-Encoding', values: [ 
             { value: 'gzip', params: null },
             { value: 'deflate', params: null }
@@ -103,8 +121,8 @@ describe('#parse()', function() {
           contentType: 'application/x-www-form-urlencoded',
           boundary: null,
           formDataParams: [
-            { name: "id", value: "11" },
-            { name: "message", value: "Hello" }
+            { name: 'id', value: '11' },
+            { name: 'message', value: 'Hello' }
           ] 
         } 
       };
@@ -114,7 +132,7 @@ describe('#parse()', function() {
     });
   });
   
-  describe("POST method", function() {      
+  describe('POST method', function() {      
     it('should parse valid http request message with contentType=multipart/form-data', function() {    
       var request = [
         'POST http://localhost/test HTTP/2.1',
@@ -147,14 +165,24 @@ describe('#parse()', function() {
         protocolVersion: 'HTTP/2.1',
         host: 'localhost',
         headers: [ 
-          { name: 'Connection', values: [ { value: 'keep-alive', params: null } ] },          
-          { name: 'Cache-Control', values: [ { value: 'no-cache', params: null } ] },
+          { name: 'Connection', values: [ 
+            { value: 'keep-alive', params: null } 
+          ]},          
+          { name: 'Cache-Control', values: [ 
+            { value: 'no-cache', params: null } 
+          ]},
           { name: 'User-Agent', values: [ 
             { value: 'Mozilla/5.0 (Windows NT 6.1 WOW64)', params: null } 
           ]},
-          { name: 'Content-Type', values: [ { value: 'multipart/form-data', params: 'boundary=------11136253119209' } ] },
-          { name: 'Content-Length', values: [ { value: '101', params: null } ] },
-          { name: 'Accept', values: [ { value: '*/*', params: null } ] },
+          { name: 'Content-Type', values: [ 
+            { value: 'multipart/form-data', params: 'boundary=------11136253119209' } 
+          ]},
+          { name: 'Content-Length', values: [ 
+            { value: '101', params: null } 
+          ]},
+          { name: 'Accept', values: [ 
+            { value: '*/*', params: null } 
+          ]},
           { name: 'Accept-Encoding', values: [ 
             { value: 'gzip', params: null },
             { value: 'deflate', params: null }
@@ -172,8 +200,8 @@ describe('#parse()', function() {
           contentType: 'multipart/form-data',
           boundary: '------11136253119209',
           formDataParams: [
-            { name: "Name", value: "Ivanov" },
-            { name: "Age", value: "25" }
+            { name: 'Name', value: 'Ivanov' },
+            { name: 'Age', value: '25' }
           ] 
         } 
       };
@@ -206,14 +234,24 @@ describe('#parse()', function() {
         protocolVersion: 'HTTP/1.1',
         host: 'localhost',
         headers: [ 
-          { name: 'Connection', values: [ { value: 'keep-alive', params: null } ] },          
-          { name: 'Cache-Control', values: [ { value: 'no-cache', params: null } ] },
+          { name: 'Connection', values: [ 
+            { value: 'keep-alive', params: null } 
+          ]},          
+          { name: 'Cache-Control', values: [ 
+            { value: 'no-cache', params: null } 
+          ]},
           { name: 'User-Agent', values: [ 
             { value: 'Mozilla/5.0 (Windows NT 6.1 WOW64)', params: null }
           ]},
-          { name: 'Content-Type', values: [ { value: 'application/json', params: null } ] },
-          { name: 'Content-Length', values: [ { value: '501', params: null } ] },
-          { name: 'Accept', values: [ { value: '*/*', params: null } ] },
+          { name: 'Content-Type', values: [ 
+            { value: 'application/json', params: null } 
+          ]},
+          { name: 'Content-Length', values: [ 
+            { value: '501', params: null } 
+          ]},
+          { name: 'Accept', values: [ 
+            { value: '*/*', params: null } 
+          ]},
           { name: 'Accept-Encoding', values: [ 
             { value: 'gzip', params: null },
             { value: 'deflate', params: null },
