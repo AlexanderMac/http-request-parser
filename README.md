@@ -1,7 +1,7 @@
 http-request-parser
 ===================
 
-A node package for parsing a plain http request, and creating an object model for it.
+A node package for parsing HTTP request message, and creating an object model for it.
 
 ## Features
 * Parsing headers (with parameters).
@@ -84,7 +84,7 @@ var requestObj = {
 };*/
 ```
 
-The package generates an object, which can be used in another [package](https://github.com/AlexanderMac/http-request-builder) (builds a plain http request from an object).
+The package generates an object model, which can be used in another [package](https://github.com/AlexanderMac/http-request-builder) (builds HTTP request message from an object model).
 
 ## License
 This code available under the MIT License.
