@@ -72,8 +72,7 @@ var requestObj = {
     { name: 'csrftoken', value: '123abc' },
     { name: 'sessionid', value: '456def' }
   ],
-  body: { 
-    hasBody: true,
+  body: {
     contentType: 'multipart/form-data',
     boundary: '------11136253119209',
     formDataParams: [
