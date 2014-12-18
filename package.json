@@ -1,10 +1,10 @@
 {
   "name": "http-request-parser",
   "version": "1.0.3",
-  "description": "A node package for parsing http request, and creating an object model for it.",
+  "description": "A node package for parsing HTTP request message, and creating an object model for it.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec --check-leaks"
   },
   "dependencies": {
     "lodash": "^2.4.1",
@@ -17,9 +17,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/AlexanderMac/http-request-parser"
-  },
-  "scripts": {
-    "test": "mocha --reporter spec --check-leaks"
   },
   "keywords": [
     "http-utility",
