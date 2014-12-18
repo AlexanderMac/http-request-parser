@@ -17,17 +17,17 @@ A node package for parsing HTTP request message, and creating an object model fo
 var parser = require('http-request-parser');
 
 var request = [
-  'POST http://localhost/test HTTP/2.1',
-  'Host: localhost',
+  'POST http://app.com/features?p1=v1 HTTP/1.1',
+  'Host: app.com',
   'Connection: keep-alive',      
   'Cache-Control: no-cache',
   'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
-  'Content-Type: multipart/form-data; boundary=------11136253119209',
+  'Content-Type: multipart/form-data;boundary=------11136253119209',
   'Content-Length: 101',
-  'Cookie: csrftoken=123abc;sessionid=456def',
+  'Cookie: csrftoken=123abc; sessionid=456def',
   'Accept: */*',
   'Accept-Encoding: gzip,deflate',
-  'Accept-Language: en-US;q=0.6,en;q=0.4',
+  'Accept-Language: en-US;q=0.6, en;q=0.4',
   '',
   '-----------------------------11136253119209',
   'Content-Disposition: form-data; name="Name"',
@@ -47,9 +47,9 @@ var requestObj = parser.parse(request);
 var requestObj = { 
   method: 'POST',
   protocol: 'HTTP',
-  url: 'localhost/test',
-  protocolVersion: 'HTTP/2.1',
-  host: 'localhost',
+  url: 'app.com/features?p1=v1',
+  protocolVersion: 'HTTP/1.1',
+  host: 'app.com',
   headers: [ 
     { name: 'Connection', values: [ { value: 'keep-alive', params: null } ] },          
     { name: 'Cache-Control', values: [ { value: 'no-cache', params: null } ] },
