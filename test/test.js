@@ -423,7 +423,7 @@ describe('#parse()', function() {
     };
     
     it('should throw Error for invalid cookie', function() {
-      var rm = _.clone(requestMsg);
+      var rm = _.clone(requestMsg, true);
       
       rm[8] = 'Cookie: csrftoken:123abc;sessionid=456def';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
@@ -437,8 +437,8 @@ describe('#parse()', function() {
     });
     
     it('should not throw Error for empty cookie line', function() {
-      var rm = _.clone(requestMsg);
-      var ro = _.clone(requestObj);
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
       
       rm.splice(8, 1);
       ro.cookie = null;
@@ -448,8 +448,8 @@ describe('#parse()', function() {
     });
     
     it('should parse cookie with one name-value pair', function() {
-      var rm = _.clone(requestMsg);
-      var ro = _.clone(requestObj);
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
       
       rm[8] = 'Cookie: csrftoken=123abc';
       ro.cookie = [
@@ -461,8 +461,8 @@ describe('#parse()', function() {
     });
       
     it('should parse cookie with one name-value pair and parameters', function() {
-      var rm = _.clone(requestMsg);
-      var ro = _.clone(requestObj);
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
       
       rm[8] = 'Cookie: csrftoken=123abc;sessionid=456def';
       ro.cookie = [
@@ -531,8 +531,8 @@ describe('#parse()', function() {
       body: null
     };
     
-    it('should throw Error for invalid message with contentType=application/x-www-form-urlencoded', function() {
-      var rm = _.clone(requestMsg);
+    it('should throw Error for invalid message with ContentType=application/x-www-form-urlencoded', function() {
+      var rm = _.clone(requestMsg, true);
       
       rm[8] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
       
@@ -547,8 +547,8 @@ describe('#parse()', function() {
       });
     });
     
-    it('should throw Error for invalid message with contentType=multipart/form-data', function() {
-      var rm = _.clone(requestMsg);
+    it('should throw Error for invalid message with ContentType=multipart/form-data', function() {
+      var rm = _.clone(requestMsg, true);
       
       rm[8] = 'Content-Type: multipart/form-data; boundary=------11136253119209';
       rm[11] = '-----------------------------11136253119209';
@@ -565,14 +565,14 @@ describe('#parse()', function() {
       });
     });
   
-    it('should throw Error for message with contentType=multipart/form-data without or invalid boundary parameter', function() {
-      var rm = _.clone(requestMsg);
+    it('should throw Error for message with ContentType=multipart/form-data without or invalid boundary parameter', function() {
+      var rm = _.clone(requestMsg, true);
       
       rm[11] = 'body';
       
       rm[8] = 'Content-Type: multipart/form-data';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Request with contentType=FormData must have a header with boundary'
+        message: 'Request with ContentType=FormData must have a header with boundary'
       });
       
       rm[8] = 'Content-Type: multipart/form-data; boundary';
@@ -596,9 +596,9 @@ describe('#parse()', function() {
       actual.should.eql(ro);
     });
     
-    it('should parse valid message with contentType=application/x-www-form-urlencoded', function() {
-      var rm = _.clone(requestMsg);
-      var ro = _.clone(requestObj);
+    it('should parse valid message with ContentType=application/x-www-form-urlencoded', function() {
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
       
       rm[8] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
       rm[11] = 'id=11&message=Hello';
@@ -618,9 +618,9 @@ describe('#parse()', function() {
       actual.should.eql(ro);
     });
     
-    it('should parse valid message with contentType=multipart/form-data', function() {
-      var rm = _.clone(requestMsg);
-      var ro = _.clone(requestObj);
+    it('should parse valid message with ContentType=multipart/form-data', function() {
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
       
       rm[8] = 'Content-Type: multipart/form-data; boundary=------11136253119209';
       rm[11] = '-----------------------------11136253119209';
@@ -649,9 +649,9 @@ describe('#parse()', function() {
       actual.should.eql(ro);
     });
     
-    it('should parse valid message with contentType=application/json', function() {    
-      var rm = _.clone(requestMsg);
-      var ro = _.clone(requestObj);
+    it('should parse valid message with ContentType=application/json', function() {    
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
       
       rm[8] = 'Content-Type: application/json';
       rm[11] = '{{"p1": "v1"}, {"p2": "v2"}}';
@@ -667,6 +667,7 @@ describe('#parse()', function() {
     
       var actual = parser.parse(rm.join('\n'));
       actual.should.eql(ro);
-    }); 
-  }); 
+    });
+  });
+  
 });
