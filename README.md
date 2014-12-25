@@ -1,7 +1,7 @@
 http-request-parser
 ===================
 
-A node package for parsing HTTP request message, and creating an object model for it.
+A node package for parsing HTTP request message, and creating an object model for it. Can be used on server and client sides.
 
 ## Features
 * Parsing headers (with parameters).
