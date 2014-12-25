@@ -267,6 +267,7 @@ describe('#parse()', function() {
       'Accept: */*',
       'Accept-Encoding: gzip,deflate',
       'Accept-Language: ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
+      'Referer: http://app2.net/user/fjvbuq/',
       '',
       ''
     ];
@@ -299,6 +300,9 @@ describe('#parse()', function() {
           { value: 'ru', params: 'q=0.8' },
           { value: 'en-US', params: 'q=0.6' },
           { value: 'en', params: 'q=0.4' } 
+        ]},
+        { name: 'Referer', values: [
+          { value: 'http://app2.net/user/fjvbuq/', params: null }
         ]}
       ],
       cookie: null,
@@ -313,22 +317,12 @@ describe('#parse()', function() {
         message: 'Header line must have format: [HeaderName]: [HeaderValues]'
       });
       
-      rm[2] = 'Connection: keep-alive: val';
-      parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Header line must have format: [HeaderName]: [HeaderValues]'
-      });
-      
       rm[2] = 'Connection: ';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
         message: 'Header line must have format: [HeaderName]: [HeaderValues]'
       });
       
       rm[2] = ' : keep-alive';
-      parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Header line must have format: [HeaderName]: [HeaderValues]'
-      });
-      
-      rm[2] = 'Connection: keep-alive;q:=1';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
         message: 'Header line must have format: [HeaderName]: [HeaderValues]'
       });
@@ -424,11 +418,6 @@ describe('#parse()', function() {
     
     it('should throw Error for invalid cookie', function() {
       var rm = _.clone(requestMsg, true);
-      
-      rm[8] = 'Cookie: csrftoken:123abc;sessionid=456def';
-      parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Cookie line must have format: Cookie: [Name1]=[Value1]...'
-      });
       
       rm[8] = 'Cookie: ';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
