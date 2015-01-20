@@ -13,7 +13,7 @@ A node package for parsing HTTP request message, and creating an object model fo
   * text/plain
 
 
-## Install 
+## Installation 
 
 ```
 npm i -S http-request-parser
