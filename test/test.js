@@ -1,6 +1,6 @@
 /*
  * http-request-parser
- * Copyright(c) 2014 AlexanderMac <amatsibarov@gmail.com>
+ * Copyright(c) 2014-2015 AlexanderMac <amatsibarov@gmail.com>
  * MIT Licensed
  */
 
