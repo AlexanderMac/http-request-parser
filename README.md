@@ -3,6 +3,7 @@ http-request-parser
 
 A node package for parsing HTTP request message, and creating an object model for it. Can be used on server and client sides.
 
+
 ## Features
 * Parsing headers (with parameters).
 * Parsing cookies.
@@ -11,12 +12,20 @@ A node package for parsing HTTP request message, and creating an object model fo
   * application/x-www-form-urlencoded
   * text/plain
 
+
+## Install 
+
+```
+npm i -S http-request-parser
+```
+
+
 ## Usage
 
 ```javascript
 var parser = require('http-request-parser');
 
-var request = [
+var requestMsg = [
   'POST http://app.com/features?p1=v1 HTTP/1.1',
   'Host: app.com',
   'Connection: keep-alive',      
@@ -40,11 +49,11 @@ var request = [
   '-----------------------------11136253119209--'
 ].join('\n');
 
-var requestObj = parser.parse(request);
+var requestObj = parser.parse(requestMsg);
+console.log(requestObj);
 
-// requestObj now is an object:
-/*
-var requestObj = { 
+/* will output:
+{ 
   method: 'POST',
   protocol: 'HTTP',
   url: 'app.com/features?p1=v1',
@@ -80,14 +89,17 @@ var requestObj = {
       { name: "Age", value: "25" }
     ] 
   }
-};*/
+}
+*/
 ```
 
 The package generates an object model, which can be used in another [package](https://github.com/AlexanderMac/http-request-builder) (builds HTTP request message from an object model).
 
+
 ## License
 This code available under the MIT License.
 See License.md for details.  
+
 
 ## Authors
 
