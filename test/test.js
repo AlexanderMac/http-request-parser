@@ -4,9 +4,11 @@
  * MIT Licensed
  */
 
-var parser = require('../index');
+/* global describe, it */
+
+var _                   = require('lodash');
+var parser              = require('../index');
 var InvalidRequestError = require('../lib/invalid-request-error');
-var _ = require('lodash');
 require('should');
 
 describe('#parse()', function() {
@@ -59,36 +61,41 @@ describe('#parse()', function() {
       body: null
     };
       
-    it('should throw Error for start-line without three parts separated by space', function() {
+    it('should throw Error when start-line without three parts separated by space', function() {
       var rm = _.clone(requestMsg, true);
       
-      rm[0] = 'GEThttp://app.com/features?p1=v1 HTTP/1.1';           
+      rm[0] = 'GEThttp://app.com/features?p1=v1 HTTP/1.1'; 
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'First line must have format: [Method] SP [Url] SP [Protocol]'
+        message: 'Invalid request message. First line must have format: ' +
+                 '[Method] SP [Url] SP [Protocol]. Data: GEThttp://app.com/features?p1=v1 HTTP/1.1'
       });
     
-      rm[0] = 'GEThttp://app.com/features?p1=v1HTTP/1.1';            
+      rm[0] = 'GEThttp://app.com/features?p1=v1HTTP/1.1'; 
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'First line must have format: [Method] SP [Url] SP [Protocol]'
+        message: 'Invalid request message. First line must have format: '+
+                 '[Method] SP [Url] SP [Protocol]. Data: GEThttp://app.com/features?p1=v1HTTP/1.1'
       });
     });
     
-    it('should throw Error for start-line with invalid url', function() {
+    it('should throw Error when start-line with invalid url', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[0] = 'GET app.com/features?p1=v1 HTTP/1.1';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Url in first line must have format: [Protocol]://[Address]'
+        message: 'Invalid request message. Url in first line must have format: ' +
+                 '[Protocol]://[Address]. Data: app.com/features?p1=v1'
       });
       
       rm[0] = 'GET http:/app.com/features?p1=v1 HTTP/1.1';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Url in first line must have format: [Protocol]://[Address]'
+        message: 'Invalid request message. Url in first line must have format: ' +
+                 '[Protocol]://[Address]. Data: http:/app.com/features?p1=v1'
       });
       
       rm[0] = 'GET www.app.com/features?p1=v1 HTTP/1.1';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Url in first line must have format: [Protocol]://[Address]'
+        message: 'Invalid request message. Url in first line must have format: ' +
+                 '[Protocol]://[Address]. Data: www.app.com/features?p1=v1'
       });
     });
     
@@ -223,22 +230,25 @@ describe('#parse()', function() {
       body: null
     };
     
-    it('should throw Error for invalid host line', function() {
+    it('should throw Error when invalid host line', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[1] = 'Host app.com';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Host line must have format: [Host]: [Value]'
+        message: 'Invalid request message. Host line must have format: ' +
+                 '[Host]: [Value]. Data: Host app.com'
       });
       
       rm[1] = 'Host     ';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Host line must have format: [Host]: [Value]'
+        message: 'Invalid request message. Host line must have format: '+
+                 '[Host]: [Value]. Data: Host     '
       });
       
       rm[1] = ': app.com';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Host line must have format: [Host]: [Value]'
+        message: 'Invalid request message. Host line must have format: ' +
+                 '[Host]: [Value]. Data: : app.com'
       });
     });
     
@@ -309,26 +319,29 @@ describe('#parse()', function() {
       body: null
     };
     
-    it('should throw Error for invalid header format', function() {
+    it('should throw Error when header has invalid format', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[2] = 'Connection keep-alive';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Header line must have format: [HeaderName]: [HeaderValues]'
+        message: 'Invalid request message. Header line must have format: ' +
+                 '[HeaderName]: [HeaderValues]. Data: Connection keep-alive'
       });
       
       rm[2] = 'Connection: ';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Header line must have format: [HeaderName]: [HeaderValues]'
+        message: 'Invalid request message. Header line must have format: '+
+                 '[HeaderName]: [HeaderValues]. Data: Connection: '
       });
       
       rm[2] = ' : keep-alive';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Header line must have format: [HeaderName]: [HeaderValues]'
+        message: 'Invalid request message. Header line must have format: '+
+                 '[HeaderName]: [HeaderValues]. Data:  : keep-alive'
       });
     });
     
-    it('should parse a few valid headers', function() {
+    it('should parse valid headers', function() {
       var rm = _.clone(requestMsg, true);
       var ro = _.clone(requestObj, true);
       
@@ -364,7 +377,7 @@ describe('#parse()', function() {
     });
   });
 
-  describe('cookie', function() {
+  describe('cookies', function() {
     var requestMsg = [
       'GET http://app.com/features?p1=v1 HTTP/1.1',
       'Host: app.com',
@@ -416,16 +429,17 @@ describe('#parse()', function() {
       body: null
     };
     
-    it('should throw Error for invalid cookie', function() {
+    it('should throw Error when cookie is invalid', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[8] = 'Cookie: ';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Cookie line must have format: Cookie: [Name1]=[Value1]...'
+        message: 'Invalid request message. Cookie line must have format: ' +
+                 'Cookie: [Name1]=[Value1].... Data: Cookie: '
       });
     });
     
-    it('should not throw Error for empty cookie line', function() {
+    it('should not throw Error when empty cookie line', function() {
       var rm = _.clone(requestMsg, true);
       var ro = _.clone(requestObj, true);
       
@@ -520,23 +534,25 @@ describe('#parse()', function() {
       body: null
     };
     
-    it('should throw Error for invalid message with ContentType=application/x-www-form-urlencoded', function() {
+    it('should throw Error when body has invalid format and ContentType=application/x-www-form-urlencoded', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[8] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
       
       rm[11] = 'id=11&messageHello';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Invalid x-www-form-url-encode parameter'
+        message: 'Invalid request message. Invalid x-www-form-url-encode parameter. ' +
+                 'Data: messageHello'
       });
       
       rm[11] = 'id=11&message=Hello& ';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Invalid x-www-form-url-encode parameter'
+        message: 'Invalid request message. Invalid x-www-form-url-encode parameter. ' +
+                 'Data:  '
       });
     });
     
-    it('should throw Error for invalid message with ContentType=multipart/form-data', function() {
+    it('should throw Error when body has invalid format and ContentType=multipart/form-data', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[8] = 'Content-Type: multipart/form-data; boundary=------11136253119209';
@@ -550,32 +566,36 @@ describe('#parse()', function() {
       rm[18] = '25';
       rm[19] = '-----------------------------11136253119209--';      
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Invalid formData parameter'
+        message: 'Invalid request message. Invalid formData parameter. ' +
+                 'Data: \nContent-Disposit: form-data; name="Name"\n\nIvanov\n'
       });
     });
   
-    it('should throw Error for message with ContentType=multipart/form-data without or invalid boundary parameter', function() {
+    /* jshint maxlen: 130 */
+    it('should throw Error when ContentType=multipart/form-data without and boundary parameter has invalid format', function() {
       var rm = _.clone(requestMsg, true);
       
       rm[11] = 'body';
       
       rm[8] = 'Content-Type: multipart/form-data';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Request with ContentType=FormData must have a header with boundary'
+        message: 'Invalid request message. Request with ContentType=FormData must have a header with boundary'
       });
       
       rm[8] = 'Content-Type: multipart/form-data; boundary';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Boundary param must have format: [boundary]=[value]'
+        message: 'Invalid request message. Boundary param must have format: [boundary]=[value]. ' +
+                 'Data: boundary'
       });
       
       rm[8] = 'Content-Type: multipart/form-data; boundary=';
       parser.parse.bind(null, rm.join('\n')).should.throw(InvalidRequestError, {
-        message: 'Boundary param must have format: [boundary]=[value]'
+        message: 'Invalid request message. Boundary param must have format: [boundary]=[value]. ' +
+                 'Data: boundary='
       });
     });
       
-    it('should not throw Error for empty body', function() {
+    it('should not throw Error when body is empty', function() {
       var rm = _.clone(requestMsg, true);
       var ro = _.clone(requestObj, true);
     
@@ -585,7 +605,7 @@ describe('#parse()', function() {
       actual.should.eql(ro);
     });
     
-    it('should parse valid message with ContentType=application/x-www-form-urlencoded', function() {
+    it('should parse valid body with ContentType=application/x-www-form-urlencoded', function() {
       var rm = _.clone(requestMsg, true);
       var ro = _.clone(requestObj, true);
       
@@ -607,7 +627,8 @@ describe('#parse()', function() {
       actual.should.eql(ro);
     });
     
-    it('should parse valid message with ContentType=multipart/form-data', function() {
+    /* jshint maxstatements: 16 */
+    it('should parse valid body with ContentType=multipart/form-data', function() {
       var rm = _.clone(requestMsg, true);
       var ro = _.clone(requestObj, true);
       
@@ -638,7 +659,7 @@ describe('#parse()', function() {
       actual.should.eql(ro);
     });
     
-    it('should parse valid message with ContentType=application/json', function() {    
+    it('should parse valid body with ContentType=application/json', function() {    
       var rm = _.clone(requestMsg, true);
       var ro = _.clone(requestObj, true);
       
@@ -651,7 +672,27 @@ describe('#parse()', function() {
       }];
       ro.body = {
         contentType: 'application/json',
-        plain: '{{"p1": "v1"}, {"p2": "v2"}}'
+        json: '{{"p1": "v1"}, {"p2": "v2"}}'
+      };
+    
+      var actual = parser.parse(rm.join('\n'));
+      actual.should.eql(ro);
+    });
+    
+    it('should parse valid body with ContentType=text/plain', function() {
+      var rm = _.clone(requestMsg, true);
+      var ro = _.clone(requestObj, true);
+      
+      rm[8] = 'Content-Type: text/plain';
+      rm[11] = 'Plain text';
+      
+      ro.headers[6].values = [{
+        value: 'text/plain', 
+        params: null
+      }];
+      ro.body = {
+        contentType: 'text/plain',
+        plain: 'Plain text'
       };
     
       var actual = parser.parse(rm.join('\n'));
