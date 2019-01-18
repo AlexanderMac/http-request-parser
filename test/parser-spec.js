@@ -3,7 +3,7 @@
 const _                   = require('lodash');
 const should              = require('should');
 const parser              = require('../index');
-const InvalidRequestError = require('../src/invalid-request-error');
+const InvalidMessageError = require('../src/invalid-message-error');
 
 describe('parser', () => {
   describe('header', () => {
@@ -76,13 +76,13 @@ describe('parser', () => {
       let rm = _.cloneDeep(requestMsg);
 
       rm[0] = 'GEThttp://example.com/features?p1=v1 HTTP/1.1';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Header must have format: ' +
                  '[Method] [Url] [Protocol]. Data: GEThttp://example.com/features?p1=v1 HTTP/1.1'
       });
 
       rm[0] = 'GEThttp://example.com/features?p1=v1HTTP/1.1';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Header must have format: ' +
                  '[Method] [Url] [Protocol]. Data: GEThttp://example.com/features?p1=v1HTTP/1.1'
       });
@@ -92,19 +92,19 @@ describe('parser', () => {
       let rm = _.cloneDeep(requestMsg);
 
       rm[0] = 'GET example.com/features?p1=v1 HTTP/1.1';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Url in header must have format: ' +
                  '[Protocol]://[Address]. Data: example.com/features?p1=v1'
       });
 
       rm[0] = 'GET http:/example.com/features?p1=v1 HTTP/1.1';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Url in header must have format: ' +
                  '[Protocol]://[Address]. Data: http:/example.com/features?p1=v1'
       });
 
       rm[0] = 'GET www.example.com/features?p1=v1 HTTP/1.1';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Url in header must have format: ' +
                  '[Protocol]://[Address]. Data: www.example.com/features?p1=v1'
       });
@@ -263,19 +263,19 @@ describe('parser', () => {
       let rm = _.cloneDeep(requestMsg);
 
       rm[1] = 'Host example.com';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Host line must have format: ' +
                  '[Host]: [Value]. Data: Host example.com'
       });
 
       rm[1] = 'Host     ';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Host line must have format: ' +
                  '[Host]: [Value]. Data: Host     '
       });
 
       rm[1] = ': example.com';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Host line must have format: ' +
                  '[Host]: [Value]. Data: : example.com'
       });
@@ -373,19 +373,19 @@ describe('parser', () => {
       let rm = _.cloneDeep(requestMsg);
 
       rm[2] = 'Connection keep-alive';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Header line must have format: ' +
                  '[HeaderName]: [HeaderValues]. Data: Connection keep-alive'
       });
 
       rm[2] = 'Connection: ';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Header line must have format: ' +
                  '[HeaderName]: [HeaderValues]. Data: Connection: '
       });
 
       rm[2] = ' : keep-alive';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Header line must have format: ' +
                  '[HeaderName]: [HeaderValues]. Data:  : keep-alive'
       });
@@ -503,7 +503,7 @@ describe('parser', () => {
       let rm = _.cloneDeep(requestMsg);
 
       rm[8] = 'Cookie: ';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Cookie line must have format: ' +
                  'Cookie: [Name1]=[Value1].... Data: Cookie: '
       });
@@ -637,13 +637,13 @@ describe('parser', () => {
       rm[8] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
 
       rm[11] = 'id=11&messageHello';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Invalid x-www-form-url-encode parameter. ' +
                  'Data: messageHello'
       });
 
       rm[11] = 'id=11&message=Hello& ';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Invalid x-www-form-url-encode parameter. ' +
                  'Data:  '
       });
@@ -662,7 +662,7 @@ describe('parser', () => {
       rm[17] = '';
       rm[18] = '25';
       rm[19] = '-----------------------------11136253119209--';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Invalid formData parameter. ' +
                  'Data: \nContent-Disposit: form-data; name="Name"\n\nSmith\n'
       });
@@ -674,18 +674,18 @@ describe('parser', () => {
       rm[11] = 'body';
 
       rm[8] = 'Content-Type: multipart/form-data';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Request with ContentType=FormData must have a header with boundary'
       });
 
       rm[8] = 'Content-Type: multipart/form-data; boundary';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Boundary param must have format: [boundary]=[value]. ' +
                  'Data: boundary'
       });
 
       rm[8] = 'Content-Type: multipart/form-data; boundary=';
-      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
+      should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidMessageError, {
         message: 'Invalid request message. Boundary param must have format: [boundary]=[value]. ' +
                  'Data: boundary='
       });

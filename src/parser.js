@@ -3,7 +3,7 @@
 const _                   = require('lodash');
 const httpConst           = require('http-const');
 const utils               = require('./utils');
-const InvalidRequestError = require('./invalid-request-error');
+const InvalidMessageError = require('./invalid-message-error');
 
 const boundaryRegexp = /boundary=-+\w+/im;
 const paramRegexp = /Content-Disposition:\s*form-data;\s*name="\w+"/im;
@@ -22,7 +22,7 @@ class HttpRequestParser {
 
   parse() {
     if (!this.requestMsg) {
-      throw new InvalidRequestError('Request must be not undefined');
+      throw new InvalidMessageError('Request must be not undefined');
     }
 
     let requestMsgLines = this._parseRequestForLines();
@@ -51,7 +51,7 @@ class HttpRequestParser {
     let headersAndBodySeparator = '\n\n';
     let headersAndBodySeparatorIndex = this.requestMsg.indexOf(headersAndBodySeparator);
     if (headersAndBodySeparatorIndex === -1) {
-      throw new InvalidRequestError(
+      throw new InvalidMessageError(
         'Request must contain headers and body, separated by two break lines');
     }
 
@@ -60,7 +60,7 @@ class HttpRequestParser {
 
     let headersLines = _.split(headers, '\n');
     if (headersLines.length === 0) {
-      throw new InvalidRequestError('No headers');
+      throw new InvalidMessageError('No headers');
     }
 
     let cookieIndex = _.findIndex(headersLines, (line) => {
@@ -84,12 +84,12 @@ class HttpRequestParser {
   _parseHeaderLine(line) {
     let methodUrlProtocolVer = _.split(line, ' ');
     if (methodUrlProtocolVer.length !== 3) {
-      throw new InvalidRequestError('Header must have format: [Method] [Url] [Protocol]', line);
+      throw new InvalidMessageError('Header must have format: [Method] [Url] [Protocol]', line);
     }
 
     let protocolAndUrl = utils.splitIntoTwoParts(methodUrlProtocolVer[1], '://');
     if (!protocolAndUrl) {
-      throw new InvalidRequestError(
+      throw new InvalidMessageError(
         'Url in header must have format: [Protocol]://[Address]',
         methodUrlProtocolVer[1]
       );
@@ -106,7 +106,7 @@ class HttpRequestParser {
   _parseHostLine(line) {
     let headerAndValue = utils.splitIntoTwoParts(line, ':');
     if (!headerAndValue) {
-      throw new InvalidRequestError('Host line must have format: [Host]: [Value]', line);
+      throw new InvalidMessageError('Host line must have format: [Host]: [Value]', line);
     }
 
     return headerAndValue[1];
@@ -118,13 +118,13 @@ class HttpRequestParser {
     return _.map(lines, line => {
       let headerAndValues = utils.splitIntoTwoParts(line, ':');
       if (!headerAndValues) {
-        throw new InvalidRequestError('Header line must have format: [HeaderName]: [HeaderValues]', line);
+        throw new InvalidMessageError('Header line must have format: [HeaderName]: [HeaderValues]', line);
       }
 
       let headerName = headerAndValues[0];
       let values = _.split(headerAndValues[1], ',');
       if (!headerName || values.length === 0 || _.some(values, val => _.isEmpty(val))) {
-        throw new InvalidRequestError('Header line must have format: [HeaderName]: [HeaderValues]', line);
+        throw new InvalidMessageError('Header line must have format: [HeaderName]: [HeaderValues]', line);
       }
 
       let valuesAndParams = _.map(values, (value) => {
@@ -149,12 +149,12 @@ class HttpRequestParser {
 
     let headerAndValues = utils.splitIntoTwoParts(line, ':');
     if (!headerAndValues) {
-      throw new InvalidRequestError('Cookie line must have format: Cookie: [Name1]=[Value1]...', line);
+      throw new InvalidMessageError('Cookie line must have format: Cookie: [Name1]=[Value1]...', line);
     }
 
     let nameValuePairs = _.split(headerAndValues[1], ';');
     if (nameValuePairs.length === 0) {
-      throw new InvalidRequestError('Cookie line must have format: Cookie: [Name1]=[Value1]...', line);
+      throw new InvalidMessageError('Cookie line must have format: Cookie: [Name1]=[Value1]...', line);
     }
 
     return _.chain(nameValuePairs)
@@ -215,17 +215,17 @@ class HttpRequestParser {
       .map(param => {
         let paramMatch = param.match(paramRegexp);
         if (!paramMatch) {
-          throw new InvalidRequestError('Invalid formData parameter', param);
+          throw new InvalidMessageError('Invalid formData parameter', param);
         }
 
         let paramNameMatch = paramMatch.toString().match(paramNameRegexp); // TODO: refactor to remove toString
         if (!paramNameMatch) {
-          throw new InvalidRequestError('formData parameter name must have format: [Name]="[Value]"', param);
+          throw new InvalidMessageError('formData parameter name must have format: [Name]="[Value]"', param);
         }
 
         let paramNameParts = _.split(paramNameMatch, '=');
         if (paramNameParts.length !== 2) {
-          throw new InvalidRequestError('formData parameter name must have format: [Name]="[Value]"', param);
+          throw new InvalidMessageError('formData parameter name must have format: [Name]="[Value]"', param);
         }
         let paramName = paramNameParts[1];
         let paramValue = param.replace(paramMatch, '').trim('\n');
@@ -245,7 +245,7 @@ class HttpRequestParser {
       .map(param => {
         let paramValue = _.split(param, '=');
         if (paramValue.length !== 2) {
-          throw new InvalidRequestError('Invalid x-www-form-url-encode parameter', param);
+          throw new InvalidMessageError('Invalid x-www-form-url-encode parameter', param);
         }
 
         return !paramValue[0] ?
@@ -277,22 +277,22 @@ class HttpRequestParser {
 
   _getBoundaryParameter(contentTypeHeaderParams) {
     if (!contentTypeHeaderParams) {
-      throw new InvalidRequestError('Request with ContentType=FormData must have a header with boundary');
+      throw new InvalidMessageError('Request with ContentType=FormData must have a header with boundary');
     }
 
     let boundaryMatch = contentTypeHeaderParams.match(boundaryRegexp);
     if (!boundaryMatch) {
-      throw new InvalidRequestError('Boundary param must have format: [boundary]=[value]', contentTypeHeaderParams);
+      throw new InvalidMessageError('Boundary param must have format: [boundary]=[value]', contentTypeHeaderParams);
     }
 
     let boundaryAndValue = _.split(boundaryMatch, '=');
     if (boundaryAndValue.length !== 2) {
-      throw new InvalidRequestError('Boundary param must have format: [boundary]=[value]', contentTypeHeaderParams);
+      throw new InvalidMessageError('Boundary param must have format: [boundary]=[value]', contentTypeHeaderParams);
     }
 
     let boundaryValue =  _.trim(boundaryAndValue[1]);
     if (!boundaryValue) {
-      throw new InvalidRequestError('Boundary param must have format: [boundary]=[value]', contentTypeHeaderParams);
+      throw new InvalidMessageError('Boundary param must have format: [boundary]=[value]', contentTypeHeaderParams);
     }
     return boundaryValue;
   }
