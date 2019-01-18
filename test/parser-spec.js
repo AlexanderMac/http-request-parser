@@ -5,11 +5,11 @@ const should              = require('should');
 const parser              = require('../index');
 const InvalidRequestError = require('../lib/invalid-request-error');
 
-describe('parse', () => {
-  describe('start-line', () => {
+describe('parser', () => {
+  describe('header', () => {
     let requestMsg = [
-      'GET http://app.com/features?p1=v1 HTTP/1.1',
-      'Host: app.com',
+      'GET http://example.com/features?p1=v1 HTTP/1.1',
+      'Host: example.com',
       'Connection: keep-alive',
       'Cache-Control: no-cache',
       'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
@@ -23,9 +23,9 @@ describe('parse', () => {
     let requestObj = {
       method: 'GET',
       protocol: 'HTTP',
-      url: 'app.com/features?p1=v1',
+      url: 'example.com/features?p1=v1',
       protocolVersion: 'HTTP/1.1',
-      host: 'app.com',
+      host: 'example.com',
       headers: [
         {
           name: 'Connection',
@@ -72,47 +72,47 @@ describe('parse', () => {
       body: null
     };
 
-    it('should throw Error when start-line without three parts separated by space', () => {
+    it('should throw Error when header without three parts separated by space', () => {
       let rm = _.cloneDeep(requestMsg);
 
-      rm[0] = 'GEThttp://app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GEThttp://example.com/features?p1=v1 HTTP/1.1';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
-        message: 'Invalid request message. First line must have format: ' +
-                 '[Method] [Url] [Protocol]. Data: GEThttp://app.com/features?p1=v1 HTTP/1.1'
+        message: 'Invalid request message. Header must have format: ' +
+                 '[Method] [Url] [Protocol]. Data: GEThttp://example.com/features?p1=v1 HTTP/1.1'
       });
 
-      rm[0] = 'GEThttp://app.com/features?p1=v1HTTP/1.1';
+      rm[0] = 'GEThttp://example.com/features?p1=v1HTTP/1.1';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
-        message: 'Invalid request message. First line must have format: ' +
-                 '[Method] [Url] [Protocol]. Data: GEThttp://app.com/features?p1=v1HTTP/1.1'
+        message: 'Invalid request message. Header must have format: ' +
+                 '[Method] [Url] [Protocol]. Data: GEThttp://example.com/features?p1=v1HTTP/1.1'
       });
     });
 
-    it('should throw Error when start-line with invalid url', () => {
+    it('should throw Error when header with invalid url', () => {
       let rm = _.cloneDeep(requestMsg);
 
-      rm[0] = 'GET app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GET example.com/features?p1=v1 HTTP/1.1';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
-        message: 'Invalid request message. Url in first line must have format: ' +
-                 '[Protocol]://[Address]. Data: app.com/features?p1=v1'
+        message: 'Invalid request message. Url in header must have format: ' +
+                 '[Protocol]://[Address]. Data: example.com/features?p1=v1'
       });
 
-      rm[0] = 'GET http:/app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GET http:/example.com/features?p1=v1 HTTP/1.1';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
-        message: 'Invalid request message. Url in first line must have format: ' +
-                 '[Protocol]://[Address]. Data: http:/app.com/features?p1=v1'
+        message: 'Invalid request message. Url in header must have format: ' +
+                 '[Protocol]://[Address]. Data: http:/example.com/features?p1=v1'
       });
 
-      rm[0] = 'GET www.app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GET www.example.com/features?p1=v1 HTTP/1.1';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
-        message: 'Invalid request message. Url in first line must have format: ' +
-                 '[Protocol]://[Address]. Data: www.app.com/features?p1=v1'
+        message: 'Invalid request message. Url in header must have format: ' +
+                 '[Protocol]://[Address]. Data: www.example.com/features?p1=v1'
       });
     });
 
     it('should parse GET method', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET http://app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GET http://example.com/features?p1=v1 HTTP/1.1';
       let ro = _.cloneDeep(requestObj);
       ro.method = 'GET';
 
@@ -122,7 +122,7 @@ describe('parse', () => {
 
     it('should parse DELETE method', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'DELETE http://app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'DELETE http://example.com/features?p1=v1 HTTP/1.1';
       let ro = _.cloneDeep(requestObj);
       ro.method = 'DELETE';
 
@@ -132,9 +132,9 @@ describe('parse', () => {
 
     it('should parse HTTP protocol and URI without parameters', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET http://app.com/features HTTP/1.1';
+      rm[0] = 'GET http://example.com/features HTTP/1.1';
       let ro = _.cloneDeep(requestObj);
-      ro.url = 'app.com/features';
+      ro.url = 'example.com/features';
 
       let actual = parser.parse(rm.join('\n'));
       should(actual).eql(ro);
@@ -142,9 +142,9 @@ describe('parse', () => {
 
     it('should parse HTTP protocol and URI with parameters', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET http://app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GET http://example.com/features?p1=v1 HTTP/1.1';
       let ro = _.cloneDeep(requestObj);
-      ro.url = 'app.com/features?p1=v1';
+      ro.url = 'example.com/features?p1=v1';
 
       let actual = parser.parse(rm.join('\n'));
       should(actual).eql(ro);
@@ -152,9 +152,9 @@ describe('parse', () => {
 
     it('should parse HTTPS protocol and URI without parameters', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET https://app.com/features HTTP/1.1';
+      rm[0] = 'GET https://example.com/features HTTP/1.1';
       let ro = _.cloneDeep(requestObj);
-      ro.url = 'app.com/features';
+      ro.url = 'example.com/features';
       ro.protocol = 'HTTPS';
 
       let actual = parser.parse(rm.join('\n'));
@@ -163,9 +163,9 @@ describe('parse', () => {
 
     it('should parse HTTPS protocol and URI with parameters', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET https://app.com/features?p1=v1 HTTP/1.1';
+      rm[0] = 'GET https://example.com/features?p1=v1 HTTP/1.1';
       let ro = _.cloneDeep(requestObj);
-      ro.url = 'app.com/features?p1=v1';
+      ro.url = 'example.com/features?p1=v1';
       ro.protocol = 'HTTPS';
 
       let actual = parser.parse(rm.join('\n'));
@@ -174,7 +174,7 @@ describe('parse', () => {
 
     it('should parse HTTP protocol v1.0', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET http://app.com/features?p1=v1 HTTP/1.0';
+      rm[0] = 'GET http://example.com/features?p1=v1 HTTP/1.0';
       let ro = _.cloneDeep(requestObj);
       ro.protocolVersion = 'HTTP/1.0';
 
@@ -184,7 +184,7 @@ describe('parse', () => {
 
     it('should parse HTTP protocol v2.0', () => {
       let rm = _.cloneDeep(requestMsg);
-      rm[0] = 'GET http://app.com/features?p1=v1 HTTP/2.0';
+      rm[0] = 'GET http://example.com/features?p1=v1 HTTP/2.0';
       let ro = _.cloneDeep(requestObj);
       ro.protocolVersion = 'HTTP/2.0';
 
@@ -195,8 +195,8 @@ describe('parse', () => {
 
   describe('host line', () => {
     let requestMsg = [
-      'GET http://app.com/features?p1=v1 HTTP/1.1',
-      'Host: app.com',
+      'GET http://example.com/features?p1=v1 HTTP/1.1',
+      'Host: example.com',
       'Connection: keep-alive',
       'Cache-Control: no-cache',
       'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
@@ -210,9 +210,9 @@ describe('parse', () => {
     let requestObj = {
       method: 'GET',
       protocol: 'HTTP',
-      url: 'app.com/features?p1=v1',
+      url: 'example.com/features?p1=v1',
       protocolVersion: 'HTTP/1.1',
-      host: 'app.com',
+      host: 'example.com',
       headers: [
         {
           name: 'Connection',
@@ -262,10 +262,10 @@ describe('parse', () => {
     it('should throw Error when invalid host line', () => {
       let rm = _.cloneDeep(requestMsg);
 
-      rm[1] = 'Host app.com';
+      rm[1] = 'Host example.com';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
         message: 'Invalid request message. Host line must have format: ' +
-                 '[Host]: [Value]. Data: Host app.com'
+                 '[Host]: [Value]. Data: Host example.com'
       });
 
       rm[1] = 'Host     ';
@@ -274,23 +274,23 @@ describe('parse', () => {
                  '[Host]: [Value]. Data: Host     '
       });
 
-      rm[1] = ': app.com';
+      rm[1] = ': example.com';
       should(parser.parse.bind(null, rm.join('\n'))).throw(InvalidRequestError, {
         message: 'Invalid request message. Host line must have format: ' +
-                 '[Host]: [Value]. Data: : app.com'
+                 '[Host]: [Value]. Data: : example.com'
       });
     });
 
     it('should parse valid host line', () => {
       let rm = _.cloneDeep(requestMsg);
       let ro = _.cloneDeep(requestObj);
-      ro.host = 'app.com';
+      ro.host = 'example.com';
 
-      rm[1] = 'Host: app.com';
+      rm[1] = 'Host: example.com';
       let actual = parser.parse(rm.join('\n'));
       should(actual).eql(ro);
 
-      rm[1] = 'Host   :  app.com';
+      rm[1] = 'Host   :  example.com';
       actual = parser.parse(rm.join('\n'));
       should(actual).eql(ro);
     });
@@ -298,8 +298,8 @@ describe('parse', () => {
 
   describe('headers', () => {
     let requestMsg = [
-      'GET http://app.com/features?p1=v1 HTTP/1.1',
-      'Host: app.com',
+      'GET http://example.com/features?p1=v1 HTTP/1.1',
+      'Host: example.com',
       'Connection: keep-alive',
       'Cache-Control: no-cache',
       'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
@@ -314,9 +314,9 @@ describe('parse', () => {
     let requestObj = {
       method: 'GET',
       protocol: 'HTTP',
-      url: 'app.com/features?p1=v1',
+      url: 'example.com/features?p1=v1',
       protocolVersion: 'HTTP/1.1',
-      host: 'app.com',
+      host: 'example.com',
       headers: [
         {
           name: 'Connection',
@@ -429,8 +429,8 @@ describe('parse', () => {
 
   describe('cookies', () => {
     let requestMsg = [
-      'GET http://app.com/features?p1=v1 HTTP/1.1',
-      'Host: app.com',
+      'GET http://example.com/features?p1=v1 HTTP/1.1',
+      'Host: example.com',
       'Connection: keep-alive',
       'Cache-Control: no-cache',
       'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
@@ -445,9 +445,9 @@ describe('parse', () => {
     let requestObj = {
       method: 'GET',
       protocol: 'HTTP',
-      url: 'app.com/features?p1=v1',
+      url: 'example.com/features?p1=v1',
       protocolVersion: 'HTTP/1.1',
-      host: 'app.com',
+      host: 'example.com',
       headers: [
         {
           name: 'Connection',
@@ -553,8 +553,8 @@ describe('parse', () => {
 
   describe('body', () => {
     let requestMsg = [
-      'GET http://app.com/features?p1=v1 HTTP/1.1',
-      'Host: app.com',
+      'GET http://example.com/features?p1=v1 HTTP/1.1',
+      'Host: example.com',
       'Connection: keep-alive',
       'Cache-Control: no-cache',
       'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
@@ -570,9 +570,9 @@ describe('parse', () => {
     let requestObj = {
       method: 'GET',
       protocol: 'HTTP',
-      url: 'app.com/features?p1=v1',
+      url: 'example.com/features?p1=v1',
       protocolVersion: 'HTTP/1.1',
-      host: 'app.com',
+      host: 'example.com',
       headers: [
         {
           name: 'Connection',
