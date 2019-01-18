@@ -1,33 +1,33 @@
 http-request-parser
 ===================
 
-A node package for parsing HTTP request message, and creating an object model for it. Can be used on server and client sides.
+Parse HTTP request message and create an object model for it. Can be used on server and client sides. To build HTTP request message from an object model use [http-request-builder](https://github.com/AlexanderMac/http-request-builder).
 
+[![Build Status](https://travis-ci.org/AlexanderMac/http-request-parser.svg?branch=master)](https://travis-ci.org/AlexanderMac/http-request-parser)
+[![Code Coverage](https://codecov.io/gh/AlexanderMac/http-request-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderMac/http-request-parser)
+[![npm version](https://badge.fury.io/js/http-request-parser.svg)](https://badge.fury.io/js/http-request-parser)
 
 ## Features
-* Parsing headers (with parameters).
-* Parsing cookies.
-* Parsing body with contentType:
-  * multipart/form-data
-  * application/x-www-form-urlencoded
-  * text/plain
-
+* Parse HTTP request object:
+  - headers (with parameters)
+  - cookies
+  - body (with supported contentTypes: `multipart/form-data`, `application/x-www-form-urlencoded`, `text/plain`)
 
 ## Installation 
 
-```
+```sh
 npm i -S http-request-parser
 ```
 
 
 ## Usage
 
-```javascript
-var parser = require('http-request-parser');
+```js
+const parser = require('http-request-parser');
 
-var requestMsg = [
+let requestMsg = [
   'POST http://app.com/features?p1=v1 HTTP/1.1',
-  'Host: app.com',
+  'Host: example.com',
   'Connection: keep-alive',      
   'Cache-Control: no-cache',
   'User-Agent: Mozilla/5.0 (Windows NT 6.1 WOW64)',
@@ -41,7 +41,7 @@ var requestMsg = [
   '-----------------------------11136253119209',
   'Content-Disposition: form-data; name="Name"',
   '',
-  'Ivanov',
+  'Smith',
   '-----------------------------11136253119209',
   'Content-Disposition: form-data; name="Age"',
   '',
@@ -49,16 +49,16 @@ var requestMsg = [
   '-----------------------------11136253119209--'
 ].join('\n');
 
-var requestObj = parser.parse(requestMsg);
+let requestObj = parser.parse(requestMsg);
 console.log(requestObj);
 
-/* will output:
+/* outputs:
 { 
   method: 'POST',
   protocol: 'HTTP',
-  url: 'app.com/features?p1=v1',
+  url: 'example.com/features?p1=v1',
   protocolVersion: 'HTTP/1.1',
-  host: 'app.com',
+  host: 'example.com',
   headers: [ 
     { name: 'Connection', values: [ { value: 'keep-alive', params: null } ] },          
     { name: 'Cache-Control', values: [ { value: 'no-cache', params: null } ] },
@@ -85,7 +85,7 @@ console.log(requestObj);
     contentType: 'multipart/form-data',
     boundary: '------11136253119209',
     formDataParams: [
-      { name: "Name", value: "Ivanov" },
+      { name: "Name", value: "Smith" },
       { name: "Age", value: "25" }
     ] 
   }
@@ -93,14 +93,8 @@ console.log(requestObj);
 */
 ```
 
-The package generates an object model, which can be used in another [package](https://github.com/AlexanderMac/http-request-builder) (builds HTTP request message from an object model).
-
+## Author
+Alexander Mac
 
 ## License
-This code available under the MIT License.
-See License.md for details.  
-
-
-## Authors
-
-**Alexander Mac** ([amatsibarov@gmail.com](mailto:amatsibarov@gmail.com))
+Licensed under the MIT license.
