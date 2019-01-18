@@ -3,7 +3,7 @@
 const _                   = require('lodash');
 const should              = require('should');
 const parser              = require('../index');
-const InvalidRequestError = require('../lib/invalid-request-error');
+const InvalidRequestError = require('../src/invalid-request-error');
 
 describe('parser', () => {
   describe('header', () => {

@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./lib/parser');
+module.exports = require('./src/parser');
