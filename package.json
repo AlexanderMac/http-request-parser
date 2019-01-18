@@ -1,19 +1,29 @@
 {
   "name": "http-request-parser",
-  "version": "1.2.0",
-  "description": "A node package for parsing HTTP request message, and creating an object model for it.",
+  "version": "2.0.0-alpha",
+  "description": "Parse HTTP request message and create an object model for it",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
-    "test": "node_modules/.bin/mocha -R spec --check-leaks"
+    "lint": "eslint --ext .js lib/ test/",
+    "test": "NODE_ENV=test mocha",
+    "coverage": "nyc npm test"
   },
   "dependencies": {
     "http-const": "^1.0.3",
-    "lodash": "^3.1.0",
-    "underscore.string": "^3.0.2"
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "mocha": "^2.1.0",
-    "should": "^4.6.5"
+    "eslint": "^5.12.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "should": "^13.2.3"
   },
   "repository": {
     "type": "git",
@@ -22,7 +32,8 @@
   "keywords": [
     "http-utility",
     "parser",
-    "request"
+    "request",
+    "http"
   ],
   "author": {
     "name": "Alexander Mac",

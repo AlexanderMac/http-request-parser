@@ -1,7 +1,3 @@
-/*
- * http-request-parser
- * Copyright(c) 2014-2015 AlexanderMac <amatsibarov@gmail.com>
- * MIT Licensed
- */
+'use strict';
 
 module.exports = require('./lib/parser');
