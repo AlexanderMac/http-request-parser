@@ -16,8 +16,9 @@ class HttpRequestParser {
     return instance.parse();
   }
 
-  constructor(requestMsg) {
+  constructor(requestMsg, eol = '\n') {
     this.requestMsg = requestMsg;
+    this.eol = eol;
   }
 
   parse() {
@@ -48,7 +49,7 @@ class HttpRequestParser {
   }
 
   _parseRequestForLines() {
-    let headersAndBodySeparator = '\n\n';
+    let headersAndBodySeparator = this.eol + this.eol;
     let headersAndBodySeparatorIndex = this.requestMsg.indexOf(headersAndBodySeparator);
     if (headersAndBodySeparatorIndex === -1) {
       throw new InvalidMessageError(
@@ -58,7 +59,7 @@ class HttpRequestParser {
     let headers = this.requestMsg.substr(0, headersAndBodySeparatorIndex);
     let body = this.requestMsg.substr(headersAndBodySeparatorIndex + headersAndBodySeparator.length);
 
-    let headersLines = _.split(headers, '\n');
+    let headersLines = _.split(headers, this.eol);
     if (headersLines.length === 0) {
       throw new InvalidMessageError('No headers');
     }
@@ -228,7 +229,7 @@ class HttpRequestParser {
           throw new InvalidMessageError('formData parameter name must have format: [Name]="[Value]"', param);
         }
         let paramName = paramNameParts[1];
-        let paramValue = param.replace(paramMatch, '').trim('\n');
+        let paramValue = param.replace(paramMatch, '').trim(this.eol);
 
         return {
           name: paramName.toString().replace(quoteRegexp, ''), // TODO: refactor to remove toString
