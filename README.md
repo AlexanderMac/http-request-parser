@@ -1,6 +1,8 @@
 http-request-parser
 ===================
 
+# WARNING: this repo is not maintained anymore, use [http-z](https://github.com/AlexanderMac/http-z) instead.
+
 Parse HTTP request message and create an object model for it. Can be used on server and client sides. To build HTTP request message from an object model use [http-request-builder](https://github.com/AlexanderMac/http-request-builder).
 
 [![Build Status](https://travis-ci.org/AlexanderMac/http-request-parser.svg?branch=master)](https://travis-ci.org/AlexanderMac/http-request-parser)
@@ -26,7 +28,7 @@ npm i -S http-request-parser
 const parser = require('http-request-parser');
 
 let requestMsg = [
-  'POST http://app.com/features?p1=v1 HTTP/1.1',
+  'POST http://example.com/features?p1=v1 HTTP/1.1',
   'Host: example.com',
   'Connection: keep-alive',      
   'Cache-Control: no-cache',
