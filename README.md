@@ -1,7 +1,5 @@
-http-request-parser
-===================
-
-# WARNING: this repo is not maintained anymore, use [http-z](https://github.com/AlexanderMac/http-z) instead.
+# http-request-parser
+## WARNING :warning:: This repo is not maintained anymore, use [http-z](https://github.com/AlexanderMac/http-z) instead.
 
 Parse HTTP request message and create an object model for it. Can be used on server and client sides. To build HTTP request message from an object model use [http-request-builder](https://github.com/AlexanderMac/http-request-builder).
 
@@ -9,21 +7,18 @@ Parse HTTP request message and create an object model for it. Can be used on ser
 [![Code Coverage](https://codecov.io/gh/AlexanderMac/http-request-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexanderMac/http-request-parser)
 [![npm version](https://badge.fury.io/js/http-request-parser.svg)](https://badge.fury.io/js/http-request-parser)
 
-## Features
+### Features
 * Parse HTTP request object:
   - headers (with parameters)
   - cookies
   - body (with supported contentTypes: `multipart/form-data`, `application/x-www-form-urlencoded`, `text/plain`)
 
-## Installation 
-
+### Installation 
 ```sh
 npm i -S http-request-parser
 ```
 
-
-## Usage
-
+### Usage
 ```js
 const parser = require('http-request-parser');
 
@@ -94,9 +89,8 @@ console.log(requestObj);
 }
 */
 ```
-
-## Author
+### Author
 Alexander Mac
 
-## License
+### License
 Licensed under the MIT license.
